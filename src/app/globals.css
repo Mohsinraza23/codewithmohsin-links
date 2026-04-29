@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon: #00ff88;
+  --neon-dim: #00cc6a;
+  --neon-glow: rgba(0, 255, 136, 0.2);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(0, 255, 136, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #000000;
+  color: #e2e8f0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--neon-dim);
+  border-radius: 2px;
+}
+
+/* Glassmorphism card */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+/* Neon text gradient */
+.neon-text {
+  background: linear-gradient(135deg, #00ff88, #00ccff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Link button hover glow */
+.link-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.link-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(0,204,255,0.08));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.link-btn:hover::before {
+  opacity: 1;
+}
+
+.link-btn:hover {
+  border-color: rgba(0, 255, 136, 0.7) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.25), inset 0 0 20px rgba(0, 255, 136, 0.05);
+  transform: translateY(-2px);
+}
+
+.link-btn:active {
+  transform: translateY(0px);
+}
+
+/* Animated background grid */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Stagger animation delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1.0s; }
+
+.opacity-0-init {
+  opacity: 0;
+}
