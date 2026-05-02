@@ -157,6 +157,159 @@ const stats = [
   { label: "Projects", value: 20, suffix: "+" },
 ];
 
+// ── Skills Data ───────────────────────────────────────────────────────────────
+const skills = [
+  { name: "Claude Code", pct: 95, color: "#00ff88" },
+  { name: "OpenAI / Tools", pct: 90, color: "#00ccff" },
+  { name: "Agentic AI", pct: 93, color: "#c084fc" },
+  { name: "Next.js", pct: 90, color: "#94a3b8" },
+  { name: "Python", pct: 96, color: "#3b82f6" },
+  { name: "AI / ML", pct: 80, color: "#f59e0b" },
+];
+
+// ── Skills Section ────────────────────────────────────────────────────────────
+
+function SkillsSection({ light }: { light?: boolean }) {
+  const [animated, setAnimated] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setAnimated(true); observer.disconnect(); }
+    }, { threshold: 0.2 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="w-full flex flex-col gap-2.5 animate-fade-in-up"
+      style={{ animationDelay: "0.9s", animationFillMode: "both" }}>
+      <div className="flex items-center gap-3 px-1">
+        <span className="section-label text-slate-500">Skills</span>
+        <div className="flex-1 h-px" style={{ background: "rgba(0,255,136,0.1)" }} />
+      </div>
+      <div className="glass rounded-2xl p-5 w-full flex flex-col gap-4"
+        style={{ border: "1px solid rgba(0,255,136,0.15)" }}>
+        {skills.map(skill => (
+          <div key={skill.name} className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-mono font-semibold" style={{ color: light ? "#1e293b" : "#ffffff" }}>{skill.name}</span>
+              <span className="text-xs font-mono font-bold" style={{ color: light && skill.color === "#94a3b8" ? "#64748b" : skill.color }}>{skill.pct}%</span>
+            </div>
+            <div className="w-full rounded-full h-2"
+              style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.04)" }}>
+              <div className="h-full rounded-full" style={{
+                width: animated ? `${skill.pct}%` : "0%",
+                background: `linear-gradient(90deg, ${skill.color}, ${skill.color}99)`,
+                boxShadow: `0 0 8px ${skill.color}66`,
+                transition: "width 1.4s cubic-bezier(0.4,0,0.2,1)",
+              }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Contact Form ──────────────────────────────────────────────────────────────
+
+function ContactForm() {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [msg, setMsg] = useState("");
+  const [sent, setSent] = useState(false);
+
+  function handleWhatsApp() {
+    if (!msg.trim()) return;
+    const text = name.trim()
+      ? `Hi Mohsin! I'm ${name.trim()}. ${msg.trim()}`
+      : `Hi Mohsin! ${msg.trim()}`;
+    window.open(`https://wa.me/923452615590?text=${encodeURIComponent(text)}`, "_blank");
+    setSent(true);
+    setTimeout(() => { setSent(false); setName(""); setMsg(""); setOpen(false); }, 2500);
+  }
+
+  function handleEmail() {
+    if (!msg.trim()) return;
+    const subj = name.trim() ? `Message from ${name.trim()}` : "Message from Visitor";
+    window.open(`mailto:mohsinraza2248@gmail.com?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(msg.trim())}`, "_blank");
+  }
+
+  return (
+    <div className="w-full animate-fade-in-up" style={{ animationDelay: "1.55s", animationFillMode: "both" }}>
+      <div className="flex items-center gap-3 px-1 mb-2.5">
+        <span className="section-label text-slate-500">Contact</span>
+        <div className="flex-1 h-px" style={{ background: "rgba(0,255,136,0.1)" }} />
+      </div>
+      <div className="glass rounded-2xl w-full overflow-hidden" style={{ border: "1px solid rgba(0,255,136,0.15)" }}>
+        <button onClick={() => setOpen(o => !o)}
+          className="w-full flex items-center gap-4 px-5 py-4"
+          style={{ background: "rgba(0,255,136,0.03)", transition: "background 0.2s" }}
+          onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,255,136,0.07)")}
+          onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,255,136,0.03)")}>
+          <span className="flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
+            style={{ background: "rgba(0,255,136,0.12)", border: "1px solid rgba(0,255,136,0.25)" }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          </span>
+          <div className="flex-1 text-left">
+            <p className="text-sm font-bold text-white font-mono">Send a Message</p>
+            <p className="text-xs font-mono mt-0.5 text-slate-500">via WhatsApp or Email</p>
+          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" strokeWidth="2" strokeLinecap="round" className="w-4 h-4 flex-shrink-0"
+            style={{ transition: "transform 0.3s", transform: open ? "rotate(180deg)" : "rotate(0deg)", opacity: 0.7 }}>
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+
+        <div style={{ maxHeight: open ? "500px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.4,0,0.2,1)" }}>
+          <div className="px-5 pb-5 flex flex-col gap-3" style={{ borderTop: "1px solid rgba(0,255,136,0.08)" }}>
+            {sent ? (
+              <div className="py-8 flex flex-col items-center gap-3">
+                <span className="text-3xl" style={{ color: "#00ff88" }}>✓</span>
+                <p className="text-sm font-mono font-semibold" style={{ color: "#00ff88" }}>Message sent on WhatsApp!</p>
+              </div>
+            ) : (
+              <>
+                <input value={name} onChange={e => setName(e.target.value)}
+                  placeholder="Your name (optional)"
+                  className="w-full rounded-xl px-4 py-2.5 text-sm font-mono text-white placeholder-slate-600 outline-none"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(0,255,136,0.15)", marginTop: 12 }} />
+                <textarea value={msg} onChange={e => setMsg(e.target.value)}
+                  placeholder="Your message..."
+                  rows={3}
+                  className="w-full rounded-xl px-4 py-2.5 text-sm font-mono text-white placeholder-slate-600 outline-none resize-none"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(0,255,136,0.15)" }} />
+                <div className="flex gap-2">
+                  <button onClick={handleWhatsApp}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-mono font-semibold"
+                    style={{ background: "rgba(37,211,102,0.15)", border: "1px solid rgba(37,211,102,0.4)", color: "#25D366", transition: "all 0.2s" }}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                    </svg>
+                    WhatsApp
+                  </button>
+                  <button onClick={handleEmail}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-mono font-semibold"
+                    style={{ background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.3)", color: "#00ff88", transition: "all 0.2s" }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    Email
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Animated Counter ─────────────────────────────────────────────────────────
 
 function Counter({ target, suffix }: { target: number; suffix: string }) {
@@ -252,7 +405,7 @@ function ToastContainer({ toasts }: { toasts: Toast[] }) {
 
 // ── Matrix Rain ──────────────────────────────────────────────────────────────
 
-function MatrixRain() {
+function MatrixRain({ hide }: { hide: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -291,6 +444,7 @@ function MatrixRain() {
     return () => { clearInterval(interval); window.removeEventListener("resize", onResize); };
   }, []);
 
+  if (hide) return null;
   return (
     <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" style={{ opacity: 0.4 }} />
   );
@@ -313,8 +467,13 @@ function GlowOrbs() {
 
 // ── Ripple Button ─────────────────────────────────────────────────────────────
 
-function LinkButton({ link, onToast }: { link: SocialLink; onToast: (label: string, color: string) => void }) {
+function LinkButton({ link, onToast, light }: { link: SocialLink; onToast: (label: string, color: string) => void; light?: boolean }) {
   const btnRef = useRef<HTMLAnchorElement>(null);
+  // Fix invisible light-colored icons in light mode
+  const displayColor = light
+    ? (link.color === "#ffffff" || link.color === "#f0f6fc" || link.color === "#aaaaaa"
+      ? "#374151" : link.color)
+    : link.color;
 
   function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
     const btn = btnRef.current;
@@ -365,7 +524,7 @@ function LinkButton({ link, onToast }: { link: SocialLink; onToast: (label: stri
           </span>
           <div className="flex-1 text-left">
             <div className="flex items-center gap-2 flex-wrap">
-              <p className="text-base font-bold text-white">{link.label}</p>
+              <p className="link-label text-white">{link.label}</p>
               <span className="text-[9px] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider"
                 style={{ background: "rgba(255,0,0,0.18)", border: "1px solid rgba(255,60,60,0.3)", color: "#ff7777" }}>
                 Subscribe
@@ -393,15 +552,15 @@ function LinkButton({ link, onToast }: { link: SocialLink; onToast: (label: stri
       }}
       onMouseEnter={e => {
         (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-        (e.currentTarget as HTMLElement).style.borderColor = `${link.color}88`;
-        (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 24px ${link.color}22`;
-        (e.currentTarget as HTMLElement).style.background = `${link.color}08`;
+        (e.currentTarget as HTMLElement).style.borderColor = `${displayColor}88`;
+        (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 24px ${displayColor}22`;
+        (e.currentTarget as HTMLElement).style.background = light ? `#ffffff` : `${displayColor}08`;
       }}
       onMouseLeave={e => {
         (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-        (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,255,136,0.1)";
-        (e.currentTarget as HTMLElement).style.boxShadow = "none";
-        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
+        (e.currentTarget as HTMLElement).style.borderColor = light ? "rgba(0,0,0,0.07)" : "rgba(0,255,136,0.1)";
+        (e.currentTarget as HTMLElement).style.boxShadow = light ? "0 2px 12px rgba(0,0,0,0.06)" : "none";
+        (e.currentTarget as HTMLElement).style.background = light ? "#ffffff" : "rgba(255,255,255,0.03)";
       }}>
       {/* Shimmer */}
       <div className="absolute inset-0 pointer-events-none"
@@ -412,12 +571,12 @@ function LinkButton({ link, onToast }: { link: SocialLink; onToast: (label: stri
         }} />
       <div className="flex items-center gap-4">
         <span className="flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
-          style={{ background: link.color + "18", border: `1px solid ${link.color}44`, color: link.color }}>
+          style={{ background: displayColor + "18", border: `1px solid ${displayColor}44`, color: displayColor }}>
           {link.icon}
         </span>
         <div className="flex-1 text-left">
-          <p className="text-sm font-semibold text-white">{link.label}</p>
-          <p className="text-xs font-mono mt-0.5 text-slate-500">{link.username}</p>
+          <p className="link-label text-white">{link.label}</p>
+          <p className="link-sub text-slate-500 mt-0.5">{link.username}</p>
         </div>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
           className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-x-1"
@@ -429,14 +588,199 @@ function LinkButton({ link, onToast }: { link: SocialLink; onToast: (label: stri
   );
 }
 
+// ── Certifications Panel ──────────────────────────────────────────────────────
+
+const certGroups = [
+  {
+    label: "PIAIC",
+    color: "#00ff88",
+    certs: [
+      { src: "/certificates/piaic.jpg", title: "Agentic AI Level 1 Developer", date: "Jan 30, 2026" },
+      { src: "/certificates/piaic2.jpg", title: "Agentic AI Level 1 Developer", date: "Jan 30, 2026" },
+    ],
+  },
+  {
+    label: "Microsoft",
+    color: "#0099ff",
+    certs: [
+      { src: "/certificates/microsoft-azure.png", title: "Azure AI Engineer Associate", date: "May 1, 2026" },
+      { src: "/certificates/microsoft.jpg", title: "Introduction to GitHub Copilot", date: "Jun 6, 2024" },
+    ],
+  },
+  {
+    label: "Others",
+    color: "#aaaaaa",
+    certs: [
+      { src: "/certificates/kodekloud-docker.png", title: "Docker for Beginners — KodeKloud", date: "Jan 25, 2026" },
+      { src: "/certificates/codsoft.jpg", title: "Web Development Internship", date: "May 3, 2024" },
+      { src: "/certificates/coursera.jpg", title: "TypeScript Arrays — Coursera", date: "May 2, 2024" },
+      { src: "/certificates/greatlearning.jpg", title: "Intro to TypeScript — Great Learning", date: "Apr 2024" },
+      { src: "/certificates/proprofs.jpg", title: "TypeScript Test 100/100 — ProProfs", date: "May 23, 2024" },
+    ],
+  },
+];
+
+function CertificationsPanel() {
+  const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null);
+
+  return (
+    <>
+      {/* Fullscreen preview */}
+      {preview && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: "rgba(0,0,0,0.92)", backdropFilter: "blur(12px)" }}
+          onClick={() => setPreview(null)}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={preview} alt="Certificate preview"
+            style={{ maxWidth: "100%", maxHeight: "90vh", borderRadius: 12, boxShadow: "0 0 60px rgba(0,255,136,0.2)" }}
+            onClick={e => e.stopPropagation()} />
+          <button onClick={() => setPreview(null)}
+            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-white text-lg"
+            style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>
+            ✕
+          </button>
+        </div>
+      )}
+
+      <div className="w-full animate-fade-in-up" style={{ animationDelay: "1.5s", animationFillMode: "both" }}>
+        {/* Section label */}
+        <div className="flex items-center gap-3 px-1 mb-2.5">
+          <span className="section-label text-slate-500">Certifications</span>
+          <div className="flex-1 h-px" style={{ background: "rgba(0,255,136,0.1)" }} />
+        </div>
+
+        {/* Main card — same glass style as profile card */}
+        <div className="glass rounded-2xl w-full overflow-hidden"
+          style={{ border: "1px solid rgba(0,255,136,0.15)" }}>
+
+          {/* Header row — clickable toggle */}
+          <button
+            onClick={() => setOpen(o => !o)}
+            className="w-full flex items-center gap-4 px-5 py-4 text-left"
+            style={{ background: "rgba(0,255,136,0.03)", transition: "background 0.2s" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,255,136,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,255,136,0.03)")}>
+
+            {/* Trophy icon */}
+            <span className="flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
+              style={{ background: "rgba(0,255,136,0.12)", border: "1px solid rgba(0,255,136,0.25)" }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                <path d="M6 9H4a2 2 0 0 1-2-2V5h4" />
+                <path d="M18 9h2a2 2 0 0 0 2-2V5h-4" />
+                <path d="M12 17c-3.314 0-6-2.686-6-6V3h12v8c0 3.314-2.686 6-6 6z" />
+                <path d="M8 21h8M12 17v4" />
+              </svg>
+            </span>
+
+            <div className="flex-1">
+              <p className="text-sm font-bold text-white font-mono" style={{ textShadow: "0 0 16px rgba(0,255,136,0.3)" }}>
+                My Certifications
+              </p>
+              <p className="text-xs font-mono mt-0.5 text-slate-500">9 certificates earned</p>
+            </div>
+
+            {/* Chevron */}
+            <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" strokeWidth="2" strokeLinecap="round" className="w-4 h-4 flex-shrink-0"
+              style={{ transition: "transform 0.3s", transform: open ? "rotate(180deg)" : "rotate(0deg)", opacity: 0.7 }}>
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+
+          {/* Expandable body */}
+          <div style={{
+            maxHeight: open ? "20000px" : "0px",
+            overflow: "hidden",
+            transition: "max-height 0.5s cubic-bezier(0.4,0,0.2,1)",
+          }}>
+            <div className="px-4 pb-4 flex flex-col gap-5"
+              style={{ borderTop: "1px solid rgba(0,255,136,0.08)" }}>
+
+              {certGroups.map(group => (
+                <div key={group.label} className="flex flex-col gap-2 pt-4">
+
+                  {/* Group label */}
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      style={{ background: group.color, boxShadow: `0 0 6px ${group.color}` }} />
+                    <span className="text-[10px] font-bold font-mono uppercase tracking-widest"
+                      style={{ color: group.color }}>
+                      {group.label}
+                    </span>
+                    <div className="flex-1 h-px" style={{ background: `${group.color}22` }} />
+                  </div>
+
+                  {/* Cert cards */}
+                  {group.certs.map(cert => (
+                    <div key={cert.src} onClick={() => setPreview(cert.src)}
+                      className="w-full rounded-xl relative group cursor-pointer"
+                      style={{ border: `1px solid ${group.color}22`, transition: "all 0.25s", overflow: "visible" }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLElement).style.border = `1px solid ${group.color}55`;
+                        (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 20px ${group.color}15`;
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLElement).style.border = `1px solid ${group.color}22`;
+                        (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                      }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={cert.src} alt={cert.title}
+                        style={{ width: "100%", height: "auto", display: "block", borderRadius: "0.75rem" }} />
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                        style={{ background: "rgba(0,0,0,0.45)", transition: "opacity 0.2s", borderRadius: "0.75rem" }}>
+                        <span className="text-xs font-mono text-white px-3 py-1.5 rounded-full"
+                          style={{ background: "rgba(0,0,0,0.6)", border: "1px solid rgba(255,255,255,0.2)" }}>
+                          View Full
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [lightMode, setLightMode] = useState(false);
+  const [visits, setVisits] = useState(6000);
+  const [copied, setCopied] = useState(false);
   const typedText = useTypingText();
 
   useEffect(() => { setMounted(true); }, []);
+
+  useEffect(() => {
+    const base = 6000;
+    const stored = parseInt(localStorage.getItem("mohsin_visits") || "0") + 1;
+    localStorage.setItem("mohsin_visits", String(stored));
+    setVisits(base + stored);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", lightMode ? "light" : "dark");
+  }, [lightMode]);
+
+  function handleShare() {
+    const url = "https://codewithmohsin-links.vercel.app/";
+    if (navigator.share) {
+      navigator.share({ title: "Mohsin Raza — Linktree", url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    }
+  }
 
   function addToast(label: string, color: string) {
     const id = Date.now();
@@ -460,26 +804,69 @@ export default function Home() {
 
       <ToastContainer toasts={toasts} />
 
-      <main className="relative min-h-screen bg-black bg-grid flex items-start justify-center py-12 px-4">
+      {/* ── Floating Buttons: Theme + Share ── */}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+        {/* Dark/Light toggle */}
+        <button onClick={() => setLightMode(l => !l)}
+          className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg"
+          title={lightMode ? "Dark Mode" : "Light Mode"}
+          style={{ background: lightMode ? "#1e293b" : "rgba(255,255,255,0.1)", border: lightMode ? "1px solid rgba(0,255,136,0.3)" : "1px solid rgba(255,255,255,0.15)", backdropFilter: "blur(12px)", transition: "all 0.3s" }}>
+          {lightMode ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          )}
+        </button>
+        {/* Share button */}
+        <button onClick={handleShare}
+          className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg"
+          title="Share Profile"
+          style={{ background: copied ? "rgba(0,255,136,0.2)" : lightMode ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)", border: copied ? "1px solid #00ff88" : lightMode ? "1px solid rgba(0,0,0,0.15)" : "1px solid rgba(255,255,255,0.15)", backdropFilter: "blur(12px)", transition: "all 0.3s" }}>
+          {copied ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke={lightMode ? "#374151" : "#ffffff"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5" style={{ opacity: 0.85 }}>
+              <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+          )}
+        </button>
+      </div>
+
+      <main className={`relative min-h-screen bg-grid flex items-start justify-center py-12 px-4 ${lightMode ? "light-mode" : "bg-black"}`}>
 
         {/* Matrix rain */}
-        <MatrixRain />
+        <MatrixRain hide={lightMode} />
 
-        {/* Glow orbs */}
-        <GlowOrbs />
+        {/* Glow orbs — dark mode only */}
+        {!lightMode && <GlowOrbs />}
 
-        {/* Scanline effect */}
-        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-          <div className="absolute w-full h-[2px] left-0"
-            style={{
-              background: "linear-gradient(90deg, transparent, rgba(0,255,136,0.15), transparent)",
-              animation: "scanline 8s linear infinite",
-            }} />
-        </div>
+        {/* Scanline effect — dark mode only */}
+        {!lightMode && (
+          <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+            <div className="absolute w-full h-[2px] left-0"
+              style={{
+                background: "linear-gradient(90deg, transparent, rgba(0,255,136,0.15), transparent)",
+                animation: "scanline 8s linear infinite",
+              }} />
+          </div>
+        )}
 
-        {/* Top radial glow */}
-        <div className="fixed inset-0 pointer-events-none z-0"
-          style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,255,136,0.12) 0%, transparent 70%)" }} />
+        {/* Top radial glow — dark mode only */}
+        {!lightMode && (
+          <div className="fixed inset-0 pointer-events-none z-0"
+            style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,255,136,0.12) 0%, transparent 70%)" }} />
+        )}
 
         <div className="relative z-10 w-full max-w-md flex flex-col items-center gap-5">
 
@@ -515,7 +902,7 @@ export default function Home() {
             {/* Name + badge */}
             <div>
               <div className="flex items-center justify-center gap-2">
-                <h1 className="text-2xl font-bold neon-text font-mono tracking-tight">Mohsin Raza</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold neon-text tracking-tight" style={{ fontFamily: "var(--font-outfit)", letterSpacing: "-0.02em" }}>Mohsin Raza</h1>
                 <svg viewBox="0 0 24 24" className="w-5 h-5 flex-shrink-0" fill="none">
                   <circle cx="12" cy="12" r="10" fill="rgba(0,255,136,0.15)" stroke="#00ff88" strokeWidth="1.5" />
                   <path d="M8 12l3 3 5-5" stroke="#00ff88" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -556,13 +943,26 @@ export default function Home() {
                 </span>
               ))}
             </div>
+
+            {/* Visitor Counter */}
+            <div className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl"
+              style={{ background: "rgba(0,255,136,0.05)", border: "1px solid rgba(0,255,136,0.12)" }}>
+              <span className="w-2 h-2 rounded-full animate-pulse flex-shrink-0" style={{ background: "#00ff88", boxShadow: "0 0 6px #00ff88" }} />
+              <div className="flex flex-col">
+                <span className="text-xs font-mono font-bold neon-text">{visits.toLocaleString()}</span>
+                <span className="text-[9px] font-mono text-slate-600 uppercase tracking-wider">Visitors</span>
+              </div>
+            </div>
           </div>
+
+          {/* ── Skills ── */}
+          <SkillsSection light={lightMode} />
 
           {/* ── Link Groups ── */}
           {linkGroups.map(group => (
             <div key={group.heading} className="w-full flex flex-col gap-2.5">
               <div className="flex items-center gap-3 px-1">
-                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-600">{group.heading}</span>
+                <span className="section-label text-slate-500">{group.heading}</span>
                 <div className="flex-1 h-px" style={{ background: "rgba(0,255,136,0.1)" }} />
               </div>
               {group.links.map(link => {
@@ -570,22 +970,30 @@ export default function Home() {
                 return (
                   <div key={link.label} className="animate-fade-in-up"
                     style={{ animationDelay: d + "ms", animationFillMode: "both" }}>
-                    <LinkButton link={link} onToast={addToast} />
+                    <LinkButton link={link} onToast={addToast} light={lightMode} />
                   </div>
                 );
               })}
             </div>
           ))}
 
+          {/* ── Contact Form ── */}
+          <ContactForm />
+
+          {/* ── Certifications Section ── */}
+          <CertificationsPanel />
+
           {/* ── Footer ── */}
-          <div className="flex flex-col items-center gap-2 pb-4 animate-fade-in-up"
+          <div className="flex flex-col items-center gap-2 pb-6 animate-fade-in-up"
             style={{ animationDelay: "1.6s", animationFillMode: "both" }}>
-            <div className="flex items-center gap-2 text-slate-700">
-              <div className="w-8 h-px" style={{ background: "rgba(0,255,136,0.2)" }} />
-              <span className="text-[10px] font-mono tracking-widest uppercase">Mohsin Raza</span>
-              <div className="w-8 h-px" style={{ background: "rgba(0,255,136,0.2)" }} />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-px" style={{ background: "rgba(0,255,136,0.25)" }} />
+              <span className="footer-text text-slate-600">Mohsin Raza</span>
+              <div className="w-10 h-px" style={{ background: "rgba(0,255,136,0.25)" }} />
             </div>
-            <p className="text-[11px] font-mono text-slate-700">&copy; {new Date().getFullYear()} — All rights reserved</p>
+            <p className="text-[11px] font-semibold font-mono text-slate-600 tracking-wider">
+              &copy; {new Date().getFullYear()} — All rights reserved
+            </p>
           </div>
 
         </div>
