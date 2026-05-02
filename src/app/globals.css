@@ -299,3 +299,26 @@ h2 { font-weight: 700 !important; }
 .light-mode div.rounded-full:not([style*="width"]) {
   background: rgba(0,0,0,0.08) !important;
 }
+
+/* Projects section light mode */
+.light-mode .rounded-xl p.text-slate-400 {
+  color: #475569 !important;
+}
+.light-mode a[style*="rgba(255,255,255,0.05)"] {
+  background: rgba(0,0,0,0.05) !important;
+  border-color: rgba(0,0,0,0.12) !important;
+  color: #374151 !important;
+}
+
+/* Mobile: copy button always visible on touch screens */
+@media (hover: none) {
+  .group .opacity-40 {
+    opacity: 0.7 !important;
+  }
+}
+
+/* Ensure max width on all screens */
+@media (max-width: 380px) {
+  .link-label { font-size: 0.82rem !important; }
+  .link-sub   { font-size: 0.68rem !important; }
+}
